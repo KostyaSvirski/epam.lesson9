@@ -10,6 +10,8 @@ import by.svirski.lesson9.dao.factory.DaoFactory;
 import by.svirski.lesson9.service.CustomService;
 import by.svirski.lesson9.service.exception.ServiceException;
 import by.svirski.lesson9.service.tag.CustomTag;
+import by.svirski.lesson9.util.validator.CustomValidator;
+import by.svirski.lesson9.util.validator.impl.ValidatorForParameters;
 
 public class TabletPCServiceImpl implements CustomService<TabletPC> {
 
@@ -21,12 +23,17 @@ public class TabletPCServiceImpl implements CustomService<TabletPC> {
 		DaoFactory factory = DaoFactory.getInstance();
 		CustomDao applience = factory.getApplienceDao();
 		String[] parameters = request.trim().split(",");
-		try {
-			List<String> foundList = applience.select(CustomTag.TABLET_PC_TAG, parameters);
-			List<TabletPC> listOfBeans = convertToBeanList(foundList);
-			return listOfBeans;
-		} catch (DaoException e) {
-			throw new ServiceException(e.getMessage());
+		CustomValidator validator = new ValidatorForParameters();
+		if (validator.validate(parameters)) {
+			try {
+				List<String> foundList = applience.select(CustomTag.TABLET_PC_TAG, parameters);
+				List<TabletPC> listOfBeans = convertToBeanList(foundList);
+				return listOfBeans;
+			} catch (DaoException e) {
+				throw new ServiceException(e.getMessage());
+			}
+		} else {
+			throw new ServiceException("error in validation");
 		}
 	}
 
