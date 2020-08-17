@@ -10,8 +10,10 @@ import by.svirski.lesson9.dao.factory.DaoFactory;
 import by.svirski.lesson9.service.CustomService;
 import by.svirski.lesson9.service.exception.ServiceException;
 import by.svirski.lesson9.service.tag.CustomTag;
-import by.svirski.lesson9.util.validator.CustomValidator;
-import by.svirski.lesson9.util.validator.impl.ValidatorForParameters;
+import by.svirski.lesson9.service.util.builder.CustomBuilder;
+import by.svirski.lesson9.service.util.builder.factory.CustomBuilderFactory;
+import by.svirski.lesson9.service.util.validator.CustomValidator;
+import by.svirski.lesson9.service.util.validator.impl.ValidatorForParameters;
 
 public class LaptopServiceImpl implements CustomService<Laptop> {
 
@@ -24,33 +26,22 @@ public class LaptopServiceImpl implements CustomService<Laptop> {
 		CustomDao applience = factory.getApplienceDao();
 		String[] parameters = request.trim().split(",");
 		CustomValidator validator = new ValidatorForParameters();
-		if(validator.validate(parameters)) {
+		if (validator.validate(parameters)) {
+			CustomBuilderFactory fabric = CustomBuilderFactory.getInstance();
+			CustomBuilder<Laptop> builder = fabric.getLaptopBuilder();
 			try {
 				List<String> foundList = applience.select(CustomTag.LAPTOP_TAG, parameters);
-				List<Laptop> listOfBeans = convertToBeanList(foundList);
+				List<Laptop> listOfBeans = new ArrayList<Laptop>();
+				for (String line : foundList) {
+					listOfBeans.add(builder.build(line));
+				}
 				return listOfBeans;
 			} catch (DaoException e) {
 				throw new ServiceException(e.getMessage());
-			}			
+			}
 		} else {
 			throw new ServiceException("error in validation parameters");
 		}
-	}
-
-	private List<Laptop> convertToBeanList(List<String> foundList) {
-		List<Laptop> listOfBeans = new ArrayList<Laptop>();
-		for (String foundString : foundList) {
-			String[] parsedString = foundString.substring(foundString.indexOf(":")).trim().split(",");
-			ArrayList<String> listOfParams = new ArrayList<String>();
-			for (String parameterToParse : parsedString) {
-				listOfParams.add(parameterToParse.substring(parameterToParse.indexOf("=") + 1));
-			}
-			Laptop laptop = new Laptop(Integer.parseInt(listOfParams.get(0)), listOfParams.get(1),
-					Integer.parseInt(listOfParams.get(2)), Integer.parseInt(listOfParams.get(3)),
-					Double.parseDouble(listOfParams.get(4)), Integer.parseInt(listOfParams.get(5)));
-			listOfBeans.add(laptop);
-		}
-		return listOfBeans;
 	}
 
 }

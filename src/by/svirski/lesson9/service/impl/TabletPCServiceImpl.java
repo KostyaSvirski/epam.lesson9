@@ -10,8 +10,10 @@ import by.svirski.lesson9.dao.factory.DaoFactory;
 import by.svirski.lesson9.service.CustomService;
 import by.svirski.lesson9.service.exception.ServiceException;
 import by.svirski.lesson9.service.tag.CustomTag;
-import by.svirski.lesson9.util.validator.CustomValidator;
-import by.svirski.lesson9.util.validator.impl.ValidatorForParameters;
+import by.svirski.lesson9.service.util.builder.CustomBuilder;
+import by.svirski.lesson9.service.util.builder.factory.CustomBuilderFactory;
+import by.svirski.lesson9.service.util.validator.CustomValidator;
+import by.svirski.lesson9.service.util.validator.impl.ValidatorForParameters;
 
 public class TabletPCServiceImpl implements CustomService<TabletPC> {
 
@@ -25,9 +27,14 @@ public class TabletPCServiceImpl implements CustomService<TabletPC> {
 		String[] parameters = request.trim().split(",");
 		CustomValidator validator = new ValidatorForParameters();
 		if (validator.validate(parameters)) {
+			CustomBuilderFactory fabric = CustomBuilderFactory.getInstance();
+			CustomBuilder<TabletPC> builder = fabric.getTabletPCBuilder();
 			try {
 				List<String> foundList = applience.select(CustomTag.TABLET_PC_TAG, parameters);
-				List<TabletPC> listOfBeans = convertToBeanList(foundList);
+				List<TabletPC> listOfBeans = new ArrayList<TabletPC>();
+				for (String line : foundList) {
+					listOfBeans.add(builder.build(line));
+				}
 				return listOfBeans;
 			} catch (DaoException e) {
 				throw new ServiceException(e.getMessage());
@@ -37,19 +44,4 @@ public class TabletPCServiceImpl implements CustomService<TabletPC> {
 		}
 	}
 
-	private List<TabletPC> convertToBeanList(List<String> foundList) {
-		List<TabletPC> listOfBeans = new ArrayList<TabletPC>();
-		for (String foundString : foundList) {
-			String[] parsedString = foundString.substring(foundString.indexOf(":")).trim().split(",");
-			ArrayList<String> listOfParams = new ArrayList<String>();
-			for (String parameterToParse : parsedString) {
-				listOfParams.add(parameterToParse.substring(parameterToParse.indexOf("=") + 1));
-			}
-			TabletPC tabletPC = new TabletPC(Integer.parseInt(listOfParams.get(0)),
-					Integer.parseInt(listOfParams.get(1)), Integer.parseInt(listOfParams.get(2)),
-					Integer.parseInt(listOfParams.get(3)), listOfParams.get(4));
-			listOfBeans.add(tabletPC);
-		}
-		return listOfBeans;
-	}
 }

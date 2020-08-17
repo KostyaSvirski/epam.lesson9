@@ -10,8 +10,10 @@ import by.svirski.lesson9.dao.factory.DaoFactory;
 import by.svirski.lesson9.service.CustomService;
 import by.svirski.lesson9.service.exception.ServiceException;
 import by.svirski.lesson9.service.tag.CustomTag;
-import by.svirski.lesson9.util.validator.CustomValidator;
-import by.svirski.lesson9.util.validator.impl.ValidatorForParameters;
+import by.svirski.lesson9.service.util.builder.CustomBuilder;
+import by.svirski.lesson9.service.util.builder.factory.CustomBuilderFactory;
+import by.svirski.lesson9.service.util.validator.CustomValidator;
+import by.svirski.lesson9.service.util.validator.impl.ValidatorForParameters;
 
 public class SpeakersServiceImpl implements CustomService<Speakers> {
 
@@ -25,9 +27,14 @@ public class SpeakersServiceImpl implements CustomService<Speakers> {
 		String[] parameters = request.trim().split(",");
 		CustomValidator validator = new ValidatorForParameters();
 		if (validator.validate(parameters)) {
+			CustomBuilderFactory fabric = CustomBuilderFactory.getInstance();
+			CustomBuilder<Speakers> builder = fabric.getSpeakersBuilder();
 			try {
 				List<String> foundList = applience.select(CustomTag.SPEAKERS_TAG, parameters);
-				List<Speakers> listOfBeans = convertToBeanList(foundList);
+				List<Speakers> listOfBeans = new ArrayList<Speakers>();
+				for (String line : foundList) {
+					listOfBeans.add(builder.build(line));
+				}
 				return listOfBeans;
 			} catch (DaoException e) {
 				throw new ServiceException(e.getMessage());
@@ -35,22 +42,6 @@ public class SpeakersServiceImpl implements CustomService<Speakers> {
 		} else {
 			throw new ServiceException("error in validation");
 		}
-	}
-
-	private List<Speakers> convertToBeanList(List<String> foundList) {
-		List<Speakers> listOfBeans = new ArrayList<Speakers>();
-		for (String line : foundList) {
-			String[] parsedString = line.substring(line.indexOf(":")).trim().split(",");
-			ArrayList<String> listOfParams = new ArrayList<String>();
-			for (String parameter : parsedString) {
-				listOfParams.add(parameter.substring(parameter.indexOf("=") + 1));
-			}
-			Speakers speakers = new Speakers(Integer.parseInt(listOfParams.get(0)),
-					Integer.parseInt(listOfParams.get(1)), Double.parseDouble(listOfParams.get(2)),
-					Double.parseDouble(listOfParams.get(3)), Integer.parseInt(listOfParams.get(4)));
-			listOfBeans.add(speakers);
-		}
-		return listOfBeans;
 	}
 
 }

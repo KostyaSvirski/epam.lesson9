@@ -32,7 +32,7 @@ public class AppliancesDaoImpl implements CustomDao {
 					.collect(Collectors.toList());
 			return resultList;
 		} catch (IOException e) {
-			throw new DaoException(e.getMessage());
+			throw new DaoException("file don't exist");
 		} finally {
 			if (stream != null) {
 				stream.close();

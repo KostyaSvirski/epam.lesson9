@@ -1,9 +1,9 @@
-package by.svirski.lesson9.util.validator.impl;
+package by.svirski.lesson9.service.util.validator.impl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import by.svirski.lesson9.util.validator.CustomValidator;
+import by.svirski.lesson9.service.util.validator.CustomValidator;
 
 public class ValidatorForParameters implements CustomValidator {
 	

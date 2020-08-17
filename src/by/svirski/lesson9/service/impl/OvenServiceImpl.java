@@ -10,8 +10,10 @@ import by.svirski.lesson9.dao.factory.DaoFactory;
 import by.svirski.lesson9.service.CustomService;
 import by.svirski.lesson9.service.exception.ServiceException;
 import by.svirski.lesson9.service.tag.CustomTag;
-import by.svirski.lesson9.util.validator.CustomValidator;
-import by.svirski.lesson9.util.validator.impl.ValidatorForParameters;
+import by.svirski.lesson9.service.util.builder.CustomBuilder;
+import by.svirski.lesson9.service.util.builder.factory.CustomBuilderFactory;
+import by.svirski.lesson9.service.util.validator.CustomValidator;
+import by.svirski.lesson9.service.util.validator.impl.ValidatorForParameters;
 
 public class OvenServiceImpl implements CustomService<Oven> {
 
@@ -25,9 +27,14 @@ public class OvenServiceImpl implements CustomService<Oven> {
 		String[] parameters = request.trim().split(",");
 		CustomValidator validator = new ValidatorForParameters();
 		if (validator.validate(parameters)) {
+			CustomBuilderFactory fabric = CustomBuilderFactory.getInstance();
+			CustomBuilder<Oven> builder = fabric.getOvenBuilder();
 			try {
 				List<String> foundList = applience.select(CustomTag.OVEN_TAG, parameters);
-				List<Oven> listOfBeans = convertToBeanList(foundList);
+				List<Oven> listOfBeans = new ArrayList<Oven>();
+				for (String line : foundList) {
+					listOfBeans.add(builder.build(line));
+				}
 				return listOfBeans;
 			} catch (DaoException e) {
 				throw new ServiceException(e.getMessage());
@@ -35,22 +42,6 @@ public class OvenServiceImpl implements CustomService<Oven> {
 		} else {
 			throw new ServiceException("error in validation");
 		}
-	}
-
-	private List<Oven> convertToBeanList(List<String> foundList) {
-		List<Oven> listOfBeans = new ArrayList<Oven>();
-		for (String line : foundList) {
-			String[] parsedString = line.substring(line.indexOf(":")).trim().split(",");
-			ArrayList<String> listOfParams = new ArrayList<String>();
-			for (String parameter : parsedString) {
-				listOfParams.add(parameter.substring(parameter.indexOf("=") + 1));
-			}
-			Oven oven = new Oven(Integer.parseInt(listOfParams.get(0)), Integer.parseInt(listOfParams.get(1)),
-					Integer.parseInt(listOfParams.get(2)), Double.parseDouble(listOfParams.get(3)),
-					Double.parseDouble(listOfParams.get(4)), Double.parseDouble(listOfParams.get(5)));
-			listOfBeans.add(oven);
-		}
-		return listOfBeans;
 	}
 
 }

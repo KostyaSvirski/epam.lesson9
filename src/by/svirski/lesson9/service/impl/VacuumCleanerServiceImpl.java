@@ -10,8 +10,10 @@ import by.svirski.lesson9.dao.factory.DaoFactory;
 import by.svirski.lesson9.service.CustomService;
 import by.svirski.lesson9.service.exception.ServiceException;
 import by.svirski.lesson9.service.tag.CustomTag;
-import by.svirski.lesson9.util.validator.CustomValidator;
-import by.svirski.lesson9.util.validator.impl.ValidatorForParameters;
+import by.svirski.lesson9.service.util.builder.CustomBuilder;
+import by.svirski.lesson9.service.util.builder.factory.CustomBuilderFactory;
+import by.svirski.lesson9.service.util.validator.CustomValidator;
+import by.svirski.lesson9.service.util.validator.impl.ValidatorForParameters;
 
 public class VacuumCleanerServiceImpl implements CustomService<VacuumCleaner> {
 
@@ -25,9 +27,14 @@ public class VacuumCleanerServiceImpl implements CustomService<VacuumCleaner> {
 		String[] parameters = request.trim().split(",");
 		CustomValidator validator = new ValidatorForParameters();
 		if (validator.validate(parameters)) {
+			CustomBuilderFactory fabric = CustomBuilderFactory.getInstance();
+			CustomBuilder<VacuumCleaner> builder = fabric.getVacuumCleanerBuilder();
 			try {
 				List<String> foundList = applience.select(CustomTag.VACUUM_CLEANER_TAG, parameters);
-				List<VacuumCleaner> listOfBeans = convertToBeanList(foundList);
+				List<VacuumCleaner> listOfBeans = new ArrayList<VacuumCleaner>();
+				for (String line : foundList) {
+					listOfBeans.add(builder.build(line));
+				}
 				return listOfBeans;
 			} catch (DaoException e) {
 				throw new ServiceException(e.getMessage());
@@ -35,22 +42,6 @@ public class VacuumCleanerServiceImpl implements CustomService<VacuumCleaner> {
 		} else {
 			throw new ServiceException("error in validation");
 		}
-	}
-
-	private List<VacuumCleaner> convertToBeanList(List<String> foundList) {
-		List<VacuumCleaner> listOfBeans = new ArrayList<VacuumCleaner>();
-		for (String foundString : foundList) {
-			String[] parsedString = foundString.substring(foundString.indexOf(":")).trim().split(",");
-			ArrayList<String> listOfParams = new ArrayList<String>();
-			for (String parameterToParse : parsedString) {
-				listOfParams.add(parameterToParse.substring(parameterToParse.indexOf("=") + 1));
-			}
-			VacuumCleaner vacuumCleaner = new VacuumCleaner(Integer.parseInt(listOfParams.get(0)), listOfParams.get(1),
-					listOfParams.get(2), listOfParams.get(3), Integer.parseInt(listOfParams.get(4)),
-					Integer.parseInt(listOfParams.get(5)));
-			listOfBeans.add(vacuumCleaner);
-		}
-		return listOfBeans;
 	}
 
 }
