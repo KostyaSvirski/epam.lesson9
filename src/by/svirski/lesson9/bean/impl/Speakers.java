@@ -6,18 +6,17 @@ public class Speakers implements BeanIndicator{
 	
 	private int power;
 	private int numberOfSpeakers;
-	private double minRange;
-	private double maxRange;
+	private String range;
 	private int cordLength;	
 
 	public Speakers() {
 	}
 
-	public Speakers(int power, int numberOfSpeakers, double minRange, double maxRange, int cordLength) {
+	public Speakers(int power, int numberOfSpeakers, String range, int cordLength) {
+		super();
 		this.power = power;
 		this.numberOfSpeakers = numberOfSpeakers;
-		this.minRange = minRange;
-		this.maxRange = maxRange;
+		this.range = range;
 		this.cordLength = cordLength;
 	}
 
@@ -29,12 +28,8 @@ public class Speakers implements BeanIndicator{
 		return numberOfSpeakers;
 	}
 
-	public double getMinRange() {
-		return minRange;
-	}
-
-	public double getMaxRange() {
-		return maxRange;
+	public String getRange() {
+		return range;
 	}
 
 	public int getCordLength() {
@@ -49,12 +44,8 @@ public class Speakers implements BeanIndicator{
 		this.numberOfSpeakers = numberOfSpeakers;
 	}
 
-	public void setMinRange(double minRange) {
-		this.minRange = minRange;
-	}
-
-	public void setMaxRange(double maxRange) {
-		this.maxRange = maxRange;
+	public void setRange(String range) {
+		this.range = range;
 	}
 
 	public void setCordLength(int cordLength) {
@@ -66,13 +57,9 @@ public class Speakers implements BeanIndicator{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + cordLength;
-		long temp;
-		temp = Double.doubleToLongBits(maxRange);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(minRange);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + numberOfSpeakers;
 		result = prime * result + power;
+		result = prime * result + ((range == null) ? 0 : range.hashCode());
 		return result;
 	}
 
@@ -91,16 +78,17 @@ public class Speakers implements BeanIndicator{
 		if (cordLength != other.cordLength) {
 			return false;
 		}
-		if (Double.doubleToLongBits(maxRange) != Double.doubleToLongBits(other.maxRange)) {
-			return false;
-		}
-		if (Double.doubleToLongBits(minRange) != Double.doubleToLongBits(other.minRange)) {
-			return false;
-		}
 		if (numberOfSpeakers != other.numberOfSpeakers) {
 			return false;
 		}
 		if (power != other.power) {
+			return false;
+		}
+		if (range == null) {
+			if (other.range != null) {
+				return false;
+			}
+		} else if (!range.equals(other.range)) {
 			return false;
 		}
 		return true;
@@ -113,15 +101,15 @@ public class Speakers implements BeanIndicator{
 		builder.append(power);
 		builder.append(", numberOfSpeakers=");
 		builder.append(numberOfSpeakers);
-		builder.append(", minRange=");
-		builder.append(minRange);
-		builder.append(", maxRange=");
-		builder.append(maxRange);
+		builder.append(", range=");
+		builder.append(range);
 		builder.append(", cordLength=");
 		builder.append(cordLength);
 		builder.append("]");
 		return builder.toString();
 	}
+
+	
 
 	
 }

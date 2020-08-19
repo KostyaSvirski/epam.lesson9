@@ -4,7 +4,7 @@ import by.svirski.lesson9.bean.BeanIndicator;
 
 public class Laptop implements BeanIndicator{
 	
-	private int batteryCapacicty;
+	private double batteryCapacicty;
 	private String OS;
 	private int memmoryRom;
 	private int memmorySys;
@@ -14,7 +14,7 @@ public class Laptop implements BeanIndicator{
 	public Laptop() {
 	}
 
-	public Laptop(int batteryCapacicty, String oS, int memmoryRom, int memmorySys, double cPU, int displayInches) {
+	public Laptop(double batteryCapacicty, String oS, int memmoryRom, int memmorySys, double cPU, int displayInches) {
 		this.batteryCapacicty = batteryCapacicty;
 		OS = oS;
 		this.memmoryRom = memmoryRom;
@@ -23,7 +23,7 @@ public class Laptop implements BeanIndicator{
 		this.displayInches = displayInches;
 	}
 
-	public int getBatteryCapacicty() {
+	public double getBatteryCapacicty() {
 		return batteryCapacicty;
 	}
 
@@ -79,7 +79,8 @@ public class Laptop implements BeanIndicator{
 		temp = Double.doubleToLongBits(CPU);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((OS == null) ? 0 : OS.hashCode());
-		result = prime * result + batteryCapacicty;
+		temp = Double.doubleToLongBits(batteryCapacicty);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + displayInches;
 		result = prime * result + memmoryRom;
 		result = prime * result + memmorySys;
@@ -108,7 +109,7 @@ public class Laptop implements BeanIndicator{
 		} else if (!OS.equals(other.OS)) {
 			return false;
 		}
-		if (batteryCapacicty != other.batteryCapacicty) {
+		if (Double.doubleToLongBits(batteryCapacicty) != Double.doubleToLongBits(other.batteryCapacicty)) {
 			return false;
 		}
 		if (displayInches != other.displayInches) {

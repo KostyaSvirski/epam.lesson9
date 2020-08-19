@@ -17,10 +17,9 @@ public class SpeakersBuilder implements CustomBuilder<Speakers> {
 		for (String parameter : parsedString) {
 			listOfParams.add(parameter.substring(parameter.indexOf("=") + 1));
 		}
-		
+
 		Speakers speakers = new Speakers(Integer.parseInt(listOfParams.get(0)), Integer.parseInt(listOfParams.get(1)),
-				Double.parseDouble(listOfParams.get(2)), Double.parseDouble(listOfParams.get(3)),
-				Integer.parseInt(listOfParams.get(4)));
+				listOfParams.get(2), Integer.parseInt(listOfParams.get(3)));
 		return speakers;
 	}
 

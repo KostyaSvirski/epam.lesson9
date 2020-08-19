@@ -18,7 +18,7 @@ public class LaptopBuilder implements CustomBuilder<Laptop> {
 			listOfParams.add(parameterToParse.substring(parameterToParse.indexOf("=") + 1));
 		}
 		
-		Laptop laptop = new Laptop(Integer.parseInt(listOfParams.get(0)), listOfParams.get(1),
+		Laptop laptop = new Laptop(Double.parseDouble(listOfParams.get(0)), listOfParams.get(1),
 				Integer.parseInt(listOfParams.get(2)), Integer.parseInt(listOfParams.get(3)),
 				Double.parseDouble(listOfParams.get(4)), Integer.parseInt(listOfParams.get(5)));
 		return laptop;
