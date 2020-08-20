@@ -1,8 +1,8 @@
 package by.svirski.lesson9.bean.impl;
 
-import by.svirski.lesson9.bean.BeanIndicator;
+import by.svirski.lesson9.bean.Appliances;
 
-public class Laptop implements BeanIndicator{
+public class Laptop implements Appliances{
 	
 	private double batteryCapacicty;
 	private String OS;

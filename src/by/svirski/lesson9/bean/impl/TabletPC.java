@@ -1,8 +1,8 @@
 package by.svirski.lesson9.bean.impl;
 
-import by.svirski.lesson9.bean.BeanIndicator;
+import by.svirski.lesson9.bean.Appliances;
 
-public class TabletPC implements BeanIndicator{
+public class TabletPC implements Appliances{
 	
 	private int battaryCapacity;
 	private int displayInches;

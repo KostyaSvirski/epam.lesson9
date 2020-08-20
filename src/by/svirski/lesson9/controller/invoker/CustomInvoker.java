@@ -3,9 +3,9 @@ package by.svirski.lesson9.controller.invoker;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.svirski.lesson9.bean.BeanIndicator;
+import by.svirski.lesson9.bean.Appliances;
 import by.svirski.lesson9.controller.command.AbstractCommand;
-import by.svirski.lesson9.controller.exception.CommandExceptiom;
+import by.svirski.lesson9.controller.exception.CommandException;
 import by.svirski.lesson9.controller.exception.ProviderException;
 import by.svirski.lesson9.controller.provider.CommandProvider;
 
@@ -24,12 +24,12 @@ public final class CustomInvoker {
 	}
 
 	public String invoke(String request) {
-		List<? extends BeanIndicator> resultList = new ArrayList<BeanIndicator>();
+		List<? extends Appliances> resultList = new ArrayList<Appliances>();
 		String[] parsedRequest = request.strip().split(":", 2);
 		try {
-			AbstractCommand<? extends BeanIndicator> command = CommandProvider.defineCommand(parsedRequest[0]);
+			AbstractCommand command = CommandProvider.defineCommand(parsedRequest[0]);
 			resultList = command.execute(parsedRequest[1]);
-		} catch (ProviderException | CommandExceptiom e) {
+		} catch (ProviderException | CommandException e) {
 			e.printStackTrace();
 		}
 		return resultList.toString();

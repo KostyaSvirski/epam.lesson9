@@ -9,7 +9,7 @@ public class View {
 
 	public static void main(String[] args) {
 		CustomInvoker invoker = CustomInvoker.getInstance();
-		String result = invoker.invoke("Speakers: frequency_range=2-4");
+		String result = invoker.invoke("Speakers: _=_");
 		System.out.println(result);
 	}
 

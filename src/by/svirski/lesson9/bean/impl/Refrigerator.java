@@ -1,8 +1,8 @@
 package by.svirski.lesson9.bean.impl;
 
-import by.svirski.lesson9.bean.BeanIndicator;
+import by.svirski.lesson9.bean.Appliances;
 
-public class Refrigerator implements BeanIndicator{
+public class Refrigerator implements Appliances{
 	
 	private int power;
 	private int weight;

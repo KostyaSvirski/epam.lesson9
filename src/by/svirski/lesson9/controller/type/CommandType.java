@@ -1,6 +1,5 @@
 package by.svirski.lesson9.controller.type;
 
-import by.svirski.lesson9.bean.BeanIndicator;
 import by.svirski.lesson9.controller.command.AbstractCommand;
 import by.svirski.lesson9.controller.command.impl.*;
 
@@ -13,15 +12,15 @@ public enum CommandType {
 	TABLET_PC (new TabletPCCommand(), "tablet_pc"), 
 	VACUUM_CLEANER (new VacuumCleanerCommand(), "vacuum_cleaner");
 
-	private AbstractCommand<? extends BeanIndicator> command;
+	private AbstractCommand command;
 	private String applience;
 
-	private CommandType(AbstractCommand<? extends BeanIndicator> command, String applience) {
+	private CommandType(AbstractCommand command, String applience) {
 		this.command = command;
 		this.applience = applience;
 	}
 
-	public AbstractCommand<? extends BeanIndicator> getCommand() {
+	public AbstractCommand getCommand() {
 		return command;
 	}
 
