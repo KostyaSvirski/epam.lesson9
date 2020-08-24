@@ -2,9 +2,9 @@ package by.svirski.lesson9.view;
 
 import by.svirski.lesson9.controller.invoker.CustomInvoker;
 
-public class View {
+public class AppMain {
 
-	public View() {
+	public AppMain() {
 	}
 
 	public static void main(String[] args) {
