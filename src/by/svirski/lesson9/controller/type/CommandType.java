@@ -9,8 +9,8 @@ public enum CommandType {
 	OVEN (new OvenCommand(), "oven"),
 	REFRIGERATOR (new RefrigeratorCommand(), "refrigerator"), 
 	SPEAKERS (new SpeakersCommand(), "speakers"),
-	TABLET_PC (new TabletPCCommand(), "tablet_pc"), 
-	VACUUM_CLEANER (new VacuumCleanerCommand(), "vacuum_cleaner");
+	TABLET_PC (new TabletPCCommand(), "tabletPC"), 
+	VACUUM_CLEANER (new VacuumCleanerCommand(), "vacuumCleaner");
 
 	private AbstractCommand command;
 	private String applience;

@@ -9,7 +9,7 @@ public class View {
 
 	public static void main(String[] args) {
 		CustomInvoker invoker = CustomInvoker.getInstance();
-		String result = invoker.invoke("Speakers: _=_");
+		String result = invoker.invoke("VacuumCleaner:POWER_CONSUMPTION=90 ");
 		System.out.println(result);
 	}
 

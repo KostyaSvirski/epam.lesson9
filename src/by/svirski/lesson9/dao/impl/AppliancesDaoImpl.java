@@ -17,7 +17,7 @@ import by.svirski.lesson9.service.util.builder.CustomBuilder;
 
 public class AppliancesDaoImpl implements CustomDao {
 
-	private static final String RESOURSE = "appliances";
+	private static final String RESOURSE = "property\\appliances";
 	private static final String FILE = "file.path";
 
 	public AppliancesDaoImpl() {
